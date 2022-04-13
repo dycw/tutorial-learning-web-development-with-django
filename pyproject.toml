@@ -21,7 +21,7 @@ virtual_env = ".venv/bin/python"
 
 [tool.poetry]
 name = "django-learning"
-version = "0.1.9"
+version = "0.0.2"
 description = "Learning the Django framework"
 authors = ["Derek Wan <d.wan@icloud.com>"]
 license = "MIT"
@@ -72,9 +72,9 @@ addopts = ["-rsxX", "--color=auto", "--strict-markers"]
 filterwarnings = ["error", "ignore::DeprecationWarning"]
 minversion = "7.0"
 python_files = ["tests.py", "test_*.py", "*_tests.py"]
-testpaths = "src"
+testpaths = "src/tests"
 xfail_strict = true
-looponfailroots = "mysite"
+looponfailroots = "src"
 DJANGO_SETTINGS_MODULE = "mysite.settings"
 
 [tool.pyright]
