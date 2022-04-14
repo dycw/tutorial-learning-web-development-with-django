@@ -1,7 +1,9 @@
 from beartype import beartype
-from django.http.request import HttpRequest
-from django.http.response import HttpResponse
+from django.http import HttpRequest
+from django.http import HttpResponse
 from django.shortcuts import render
+
+from reviews.models import Book
 
 
 @beartype
@@ -16,3 +18,13 @@ def book_search(request: HttpRequest) -> HttpResponse:
     return render(
         request, "book_search.html", {"search": request.GET.get("search")}
     )
+
+
+@beartype
+def welcome_view(_: HttpRequest) -> HttpResponse:
+    count = Book.objects.count()
+    message = (
+        f"<html><h1>Welcome to Bookr!</h1><p>{count} books and "
+        + "counting!</p></html>"
+    )
+    return HttpResponse(message)
