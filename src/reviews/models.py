@@ -34,7 +34,15 @@ class Book(Model):
     contributors = ManyToManyField("Contributor", through="BookContributor")
 
     def __str__(self) -> str:
-        return self.title
+        return f"{self.title} ({self.isbn})"
+
+    def isbn13(self) -> str:
+        """'9780316769174' => '978-0-31-676917-4'"""
+
+        isbn = self.isbn
+        return "-".join(
+            [isbn[0:3], isbn[3:4], isbn[4:6], isbn[6:12], isbn[12:13]]
+        )
 
 
 class Contributor(Model):
@@ -48,8 +56,15 @@ class Contributor(Model):
     )
     email = EmailField(help_text="The contact email for the contributor.")
 
+    def initialled_name(self) -> str:
+        """self.first_names='Jerome David', self.last_names='Salinger'
+        => 'Salinger, JD'"""
+
+        initials = "".join([name[0] for name in self.first_names.split(" ")])
+        return ", ".join([self.last_names, initials])
+
     def __str__(self) -> str:
-        return self.first_names
+        return self.initialled_name()
 
 
 class BookContributor(Model):
@@ -66,6 +81,11 @@ class BookContributor(Model):
         max_length=20,
     )
 
+    def __str__(self) -> str:
+        return " ".join(
+            [self.contributor.initialled_name(), self.role, self.book.isbn]
+        )
+
 
 class Review(Model):
     content = TextField(help_text="The Review text.")
@@ -80,3 +100,6 @@ class Review(Model):
     book = ForeignKey(
         Book, on_delete=CASCADE, help_text="The Book that this review is for."
     )
+
+    def __str__(self) -> str:
+        return " - ".join([self.creator.username, self.book.title])
