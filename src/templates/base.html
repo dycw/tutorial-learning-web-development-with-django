@@ -27,6 +27,7 @@
         min-height: 100px;
         font-size: 25px;
       }
+
       .navbar-brand {
         font-size: 25px;
       }
@@ -36,11 +37,13 @@
       }
     </style>
   </head>
+
   <body>
     <nav class="navbar navbar-expand-sm navbar-dark bg-dark sticky-top">
-      <a class="navbar-brand" href="/"
-        >{% block brand %}Book Review{% endblock %}</a
-      >
+      <a class="navbar-brand" href="/">
+        <!-- prettier-ignore -->
+        {% block brand %}Book Review{% endblock %}
+      </a>
       <button
         class="navbar-toggler"
         type="button"
@@ -76,6 +79,7 @@
         </form>
       </div>
     </nav>
+    <!-- prettier-ignore -->
     {% block content %}
     <h1>Welcome to Bookr!</h1>
     {% endblock %}
