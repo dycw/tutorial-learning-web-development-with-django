@@ -21,7 +21,8 @@ def book_search(request: HttpRequest) -> HttpResponse:
 
 
 @beartype
-def welcome_view(_: HttpRequest) -> HttpResponse:
+def welcome_view(request: HttpRequest) -> HttpResponse:
+    return render(request, "base.html")
     count = Book.objects.count()
     message = (
         f"<html><h1>Welcome to Bookr!</h1><p>{count} books and "
