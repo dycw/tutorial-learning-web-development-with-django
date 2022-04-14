@@ -13,4 +13,6 @@ def index(request: HttpRequest) -> HttpResponse:
 
 @beartype
 def book_search(request: HttpRequest) -> HttpResponse:
-    return render(request, "book_search.html")
+    return render(
+        request, "book_search.html", {"search": request.GET.get("search")}
+    )
