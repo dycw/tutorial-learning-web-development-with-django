@@ -1,4 +1,8 @@
-{% extends 'base.html' %} {% block content %}
+<!-- prettier-ignore -->
+{% extends 'reviews/base.html' %}
+
+<!-- prettier-ignore -->
+{% block content %}
 <br />
 <h3>Book Details</h3>
 <hr />
@@ -9,6 +13,8 @@
 <span class="text-info">Publication Date: </span
 ><span>{{ book.publication_date }}</span>
 <br />
+
+<!-- prettier-ignore -->
 {% if not reviews %}
 <hr />
 <h3>Be the first one to write a review.</h3>
@@ -19,6 +25,7 @@
 <hr />
 <h3>Review Comments</h3>
 <ul>
+  <!-- prettier-ignore -->
   {% for review in reviews %}
   <li class="list-group-item">
     <span class="text-info">Review comment: </span>
@@ -39,4 +46,7 @@
   </li>
   {% endfor %}
 </ul>
-{% endif %} {% endblock %}
+{% endif %}
+
+<!-- prettier-ignore -->
+{% endblock %}
