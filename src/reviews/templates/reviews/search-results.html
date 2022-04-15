@@ -1,11 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Search Results: {{ search_text }}</title>
-  </head>
+<!-- prettier-ignore -->
+{% extends 'base.html' %}
 
-  <body>
-    <h1>Search Results for <em>{{ search_text }}</em></h1>
-  </body>
-</html>
+<!-- prettier-ignore -->
+{% block title %}
+{% if form.is_valid and search_text %}
+Search Results for "{{ search_text }}"
+{% else %}
+Book Search
+{% endif %}
+{% endblock %}
+
+<!-- prettier-ignore -->
+{% block content %}
+<h2>Search for books</h2>
+{% endblock %}

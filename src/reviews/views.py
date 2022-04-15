@@ -7,7 +7,9 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 
+from reviews.forms import SearchForm
 from reviews.models import Book
+from reviews.models import Contributor
 from reviews.utils import average_rating
 
 
@@ -19,8 +21,25 @@ def index(request: HttpRequest) -> HttpResponse:
 @beartype
 def book_search(request: HttpRequest) -> HttpResponse:
     search_text = request.GET.get("search", "")
+    form = SearchForm(request.GET)
+    if form.is_valid():
+        cleaned_data = form.cleaned_data
+        if search := cleaned_data["search"]:
+            if (cleaned_data.get("search_in") or "title") == "title":
+                books = Book.objects.filter(title__icontains=search)
+            else:
+                books = set(
+                    Contributor.objects.filter(first_names__icontains=search)
+                    | Contributor.objects.filter(last_names__icontains=search)
+                )
+        else:
+            books = set()
+    else:
+        books = set()
     return render(
-        request, "reviews/search-results.html", {"search_text": search_text}
+        request,
+        "reviews/search-results.html",
+        {"form": form, "search_text": search_text, "books": books},
     )
 
 
