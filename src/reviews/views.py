@@ -7,7 +7,9 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 
+from reviews.forms import SearchForm
 from reviews.models import Book
+from reviews.models import Contributor
 from reviews.utils import average_rating
 
 
@@ -19,15 +21,32 @@ def index(request: HttpRequest) -> HttpResponse:
 @beartype
 def book_search(request: HttpRequest) -> HttpResponse:
     search_text = request.GET.get("search", "")
+    form = SearchForm(request.GET)
+    if form.is_valid():
+        cleaned_data = form.cleaned_data
+        if search := cleaned_data["search"]:
+            if (cleaned_data.get("search_in") or "title") == "title":
+                books = Book.objects.filter(title__icontains=search)
+            else:
+                books = set(
+                    Contributor.objects.filter(first_names__icontains=search)
+                    | Contributor.objects.filter(last_names__icontains=search)
+                )
+        else:
+            books = set()
+    else:
+        books = set()
     return render(
-        request, "reviews/search-results.html", {"search_text": search_text}
+        request,
+        "reviews/search-results.html",
+        {"form": form, "search_text": search_text, "books": books},
     )
 
 
 @beartype
 def book_list(request: HttpRequest) -> HttpResponse:
     books = Book.objects.all()
-    book_list = []
+    books_with_reviews = []
     for book in books:
         if reviews := cast(Any, book).review_set.all():
             book_rating = average_rating([review.rating for review in reviews])
@@ -35,15 +54,15 @@ def book_list(request: HttpRequest) -> HttpResponse:
         else:
             book_rating = None
             number_of_reviews = 0
-        book_list.append(
+        books_with_reviews.append(
             {
                 "book": book,
                 "book_rating": book_rating,
                 "number_of_reviews": number_of_reviews,
             }
         )
-    context = {"book_list": book_list}
-    return render(request, "reviews/books_list.html", context)
+    context = {"book_list": books_with_reviews}
+    return render(request, "reviews/book_list.html", context)
 
 
 @beartype
