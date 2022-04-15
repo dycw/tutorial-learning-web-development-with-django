@@ -32,11 +32,17 @@ Book Search
     {{ contributor.first_names }}
     {{ contributor.last_names }}
     <!-- prettier-ignore -->
-    {% if not forloop.last %}, {% endif %} {% endfor
-    %}
+    {% if not forloop.last %},
+    {% endif %}
+    {% endfor %}
   </li>
+  <!-- prettier-ignore -->
   {% empty %}
   <li class="list-group-item"></li>
+  <!-- prettier-ignore -->
   {% endfor %}
 </ul>
-{% endif %} {% endblock %}
+<!-- prettier-ignore -->
+{% endif %}
+<!-- prettier-ignore -->
+{% endblock %}
