@@ -13,4 +13,30 @@ Book Search
 <!-- prettier-ignore -->
 {% block content %}
 <h2>Search for books</h2>
-{% endblock %}
+<form>
+  {{ form.as_p }}
+  <button type="submit" class="btn btn-primary">Search</button>
+</form>
+{% if form.is_valid and search_text %}
+<h3>Search Results for <em>{{ search_text }}</em></h3>
+<ul class="list-group">
+  <!-- prettier-ignore -->
+  {% for book in books %}
+  <li class="list-group-item">
+    <span class="text-info">Title: </span>
+    <a href="{% url 'book_detail' book.pk %}">{{ book }}</a>
+    <br />
+    <span class="text-info">Contributors: </span>
+    <!-- prettier-ignore -->
+    {% for contributor in book.contributors.all %}
+    {{ contributor.first_names }}
+    {{ contributor.last_names }}
+    <!-- prettier-ignore -->
+    {% if not forloop.last %}, {% endif %} {% endfor
+    %}
+  </li>
+  {% empty %}
+  <li class="list-group-item"></li>
+  {% endfor %}
+</ul>
+{% endif %} {% endblock %}
