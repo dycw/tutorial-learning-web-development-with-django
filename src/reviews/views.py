@@ -116,18 +116,17 @@ def review_edit(
         review = None
     else:
         review = get_object_or_404(Review, book_id=book_pk, pk=review_pk)
-    if (request.method == "POST") and (
-        form := ReviewForm(request.POST, instance=review)
-    ).is_valid():
-        updated_review = form.save(commit=False)
-        updated_review.book = book
-        if review is None:
-            success(request, f'Review "{updated_review}" was created.')
-        else:
-            updated_review.date_edited = now()
-            updated_review.save()
-            success(request, f'Review "{updated_review}" was updated.')
-        return redirect("publisher_edit", updated_review.pk)
+    if request.method == "POST":
+        if (form := ReviewForm(request.POST, instance=review)).is_valid():
+            updated_review = form.save(commit=False)
+            updated_review.book = book
+            if review is None:
+                success(request, f'Review "{updated_review}" was created.')
+            else:
+                updated_review.date_edited = now()
+                updated_review.save()
+                success(request, f'Review "{updated_review}" was updated.')
+            return redirect("publisher_edit", updated_review.pk)
     else:
         form = ReviewForm(instance=review)
     return render(
