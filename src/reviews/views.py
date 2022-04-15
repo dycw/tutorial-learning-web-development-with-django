@@ -2,14 +2,21 @@ from typing import Any
 from typing import cast
 
 from beartype import beartype
+from django.contrib.messages import success
 from django.http import HttpRequest
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
+from django.shortcuts import redirect
 from django.shortcuts import render
+from django.utils.timezone import now
 
+from reviews.forms import PublisherForm
+from reviews.forms import ReviewForm
 from reviews.forms import SearchForm
 from reviews.models import Book
 from reviews.models import Contributor
+from reviews.models import Publisher
+from reviews.models import Review
 from reviews.utils import average_rating
 
 
@@ -74,3 +81,62 @@ def book_detail(request: HttpRequest, pk: int) -> HttpResponse:
     else:
         context = {"book": book, "book_rating": None, "reviews": None}
     return render(request, "reviews/book_detail.html", context)
+
+
+@beartype
+def publisher_edit(request: HttpRequest, pk: int | None = None) -> HttpResponse:
+    if pk is None:
+        publisher = None
+    else:
+        publisher = get_object_or_404(Publisher, pk=pk)
+    if (request.method == "POST") and (
+        form := PublisherForm(request.POST, instance=publisher)
+    ).is_valid():
+        updated_publisher = form.save()
+        if publisher is None:
+            success(request, f'Publisher "{updated_publisher}" was created.')
+        else:
+            success(request, f'Publisher "{updated_publisher}" was updated.')
+        return redirect("publisher_edit", updated_publisher.pk)
+    else:
+        form = PublisherForm(instance=publisher)
+    return render(
+        request,
+        "reviews/instance-form.html",
+        {"form": form, "instance": publisher, "model_type": Publisher.__name__},
+    )
+
+
+@beartype
+def review_edit(
+    request: HttpRequest, book_pk: int, review_pk: int | None = None
+) -> HttpResponse:
+    book = get_object_or_404(Book, pk=book_pk)
+    if review_pk is None:
+        review = None
+    else:
+        review = get_object_or_404(Review, book_id=book_pk, pk=review_pk)
+    if request.method == "POST":
+        if (form := ReviewForm(request.POST, instance=review)).is_valid():
+            updated_review = form.save(commit=False)
+            updated_review.book = book
+            if review is None:
+                success(request, f'Review "{updated_review}" was created.')
+            else:
+                updated_review.date_edited = now()
+                updated_review.save()
+                success(request, f'Review "{updated_review}" was updated.')
+            return redirect("publisher_edit", updated_review.pk)
+    else:
+        form = ReviewForm(instance=review)
+    return render(
+        request,
+        "reviews/instance-form.html",
+        {
+            "form": form,
+            "instance": review_pk,
+            "model_type": Review.__name__,
+            "related_model_type": Book.__name__,
+            "related_instance": book,
+        },
+    )
