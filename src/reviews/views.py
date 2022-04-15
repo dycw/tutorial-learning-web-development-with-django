@@ -2,14 +2,18 @@ from typing import Any
 from typing import cast
 
 from beartype import beartype
+from django.contrib.messages import success
 from django.http import HttpRequest
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
+from django.shortcuts import redirect
 from django.shortcuts import render
 
+from reviews.forms import PublisherForm
 from reviews.forms import SearchForm
 from reviews.models import Book
 from reviews.models import Contributor
+from reviews.models import Publisher
 from reviews.utils import average_rating
 
 
@@ -74,3 +78,25 @@ def book_detail(request: HttpRequest, pk: int) -> HttpResponse:
     else:
         context = {"book": book, "book_rating": None, "reviews": None}
     return render(request, "reviews/book_detail.html", context)
+
+
+@beartype
+def publisher_edit(request: HttpRequest, pk: int | None = None) -> HttpResponse:
+    if pk is None:
+        publisher = None
+    else:
+        publisher = get_object_or_404(Publisher, pk=pk)
+    if (request.method == "POST") and (
+        form := PublisherForm(request.POST, instance=publisher)
+    ).is_valid():
+        updated_publisher = form.save()
+        if publisher is None:
+            success(request, f'Publisher "{updated_publisher}" was created.')
+        else:
+            success(request, f'Publisher "{updated_publisher}" was updated.')
+        return redirect("publisher_edit", updated_publisher.pk)
+    else:
+        form = PublisherForm(instance=publisher)
+    return render(
+        request, "form-example.html", {"method": request.method, "form": form}
+    )
