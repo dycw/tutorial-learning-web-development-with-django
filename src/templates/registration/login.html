@@ -1,3 +1,4 @@
+<!-- prettier-ignore-start -->
 <!-- pretter-ignore -->
 {% extends "base.html" %} {% load i18n static %}
 
@@ -27,6 +28,7 @@
 {% endif %}
 
 <div id="content-main">
+  <!-- pretter-ignore -->
   {% if user.is_authenticated %}
   <p class="errornote">
     {% blocktranslate trimmed %} You are authenticated as {{ username }}, but
@@ -46,8 +48,10 @@
       }}
       <input type="hidden" name="next" value="{{ next }}" />
     </div>
-    {% url 'accounts:password_reset' as password_reset_url %} {% if
-    password_reset_url %}
+    {% url 'accounts:password_reset' as password_reset_url %}
+
+    <!-- pretter-ignore -->
+    {% if password_reset_url %}
     <div class="password-reset-link">
       <a href="{{ password_reset_url }}"
         >{% translate 'Forgotten your password or username?' %}</a
@@ -60,3 +64,4 @@
   </form>
 </div>
 {% endblock %}
+<!-- prettier-ignore-end -->
