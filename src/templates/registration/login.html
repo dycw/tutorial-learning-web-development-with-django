@@ -1,14 +1,30 @@
-{% extends "base.html" %} {% load i18n static %} {% block content %} {% if
-form.errors and not form.non_field_errors %}
+<!-- pretter-ignore -->
+{% extends "base.html" %} {% load i18n static %}
+
+<!-- pretter-ignore -->
+{% block content %}
+
+<!-- pretter-ignore -->
+{% if form.errors and not form.non_field_errors %}
 <p class="errornote">
-  {% if form.errors.items|length == 1 %}{% translate "Please correct the error
-  below." %}{% else %}{% translate "Please correct the errors below." %}{% endif
-  %}
+  <!-- pretter-ignore -->
+  {% if form.errors.items|length == 1 %} {% translate "Please correct the error
+  below." %} {% else %} {% translate "Please correct the errors below." %}
+  <!-- pretter-ignore -->
+  {% endif %}
 </p>
-{% endif %} {% if form.non_field_errors %} {% for error in form.non_field_errors
-%}
+<!-- pretter-ignore -->
+{% endif %}
+
+<!-- pretter-ignore -->
+{% if form.non_field_errors %}
+
+<!-- pretter-ignore -->
+{% for error in form.non_field_errors %}
 <p class="errornote">{{ error }}</p>
-{% endfor %} {% endif %}
+{% endfor %}
+<!-- pretter-ignore -->
+{% endif %}
 
 <div id="content-main">
   {% if user.is_authenticated %}
