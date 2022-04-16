@@ -1,13 +1,16 @@
-from django.http import HttpRequest
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
+from rest_framework.generics import ListAPIView
 
 from reviews.models import Book
+from reviews.models import Contributor
 from reviews.serializers import BookSerializer
+from reviews.serializers import ContributorSerializer
 
 
-@api_view()  # type: ignore
-def all_books(_: HttpRequest) -> Response:
-    books = Book.objects.all()
-    book_serializer = BookSerializer(books, many=True)
-    return Response(book_serializer.data)
+class AllBooks(ListAPIView):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+
+
+class ContributorView(ListAPIView):
+    queryset = Contributor.objects.all()
+    serializer_class = ContributorSerializer

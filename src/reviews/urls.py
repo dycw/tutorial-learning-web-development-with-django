@@ -1,6 +1,7 @@
 from django.urls import path
 
-from reviews.api_views import all_books
+from reviews.api_views import AllBooks
+from reviews.api_views import ContributorView
 from reviews.views import book_detail
 from reviews.views import book_list
 from reviews.views import book_media
@@ -12,7 +13,8 @@ from reviews.views import review_edit
 
 urlpatterns = [
     path("", index),
-    path("api/all_books/", all_books, name=all_books.__name__),
+    path("api/all_books/", AllBooks.as_view(), name="all_books"),
+    path("api/contributors/", ContributorView.as_view(), name="contributors"),
     path("books/", book_list, name=book_list.__name__),
     path("books/<int:pk>/", book_detail, name=book_detail.__name__),
     path("books/<int:pk>/media/", book_media, name=book_media.__name__),

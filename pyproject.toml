@@ -95,6 +95,7 @@ reportMissingTypeStubs = false
 reportUnknownArgumentType = false
 reportUnknownMemberType = false
 reportUnknownVariableType = false
+reportUntypedBaseClass = false
 reportCallInDefaultInitializer = "error"
 reportImplicitStringConcatenation = "error"
 reportMissingSuperCall = "error"
