@@ -1,17 +1,14 @@
 from typing import TYPE_CHECKING
-from typing import Any
 
 from django.forms import CharField
 from django.forms import ChoiceField
 from django.forms import Form
 from django.forms import IntegerField
-from django.forms import ModelForm as _ModelForm
+from django.forms import ModelForm
 
+from reviews.models import Book
 from reviews.models import Publisher
 from reviews.models import Review
-
-
-ModelForm = _ModelForm[Any] if TYPE_CHECKING else _ModelForm
 
 
 class SearchForm(Form):
@@ -22,15 +19,21 @@ class SearchForm(Form):
     )
 
 
-class PublisherForm(ModelForm):
+class PublisherForm(ModelForm[Publisher] if TYPE_CHECKING else ModelForm):
     class Meta:  # type: ignore
         model = Publisher
         fields = "__all__"
 
 
-class ReviewForm(ModelForm):
+class ReviewForm(ModelForm[Review] if TYPE_CHECKING else ModelForm):
     class Meta:  # type: ignore
         model = Review
         exclude = ["date_edited", "book"]
 
     rating = IntegerField(min_value=0, max_value=5)
+
+
+class BookMediaForm(ModelForm[Book] if TYPE_CHECKING else ModelForm):
+    class Meta:  # type: ignore
+        model = Book
+        fields = ["cover", "sample"]

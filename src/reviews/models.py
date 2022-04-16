@@ -4,7 +4,9 @@ from django.db.models import CharField
 from django.db.models import DateField
 from django.db.models import DateTimeField
 from django.db.models import EmailField
+from django.db.models import FileField
 from django.db.models import ForeignKey
+from django.db.models import ImageField
 from django.db.models import IntegerField
 from django.db.models import ManyToManyField
 from django.db.models import Model
@@ -32,6 +34,8 @@ class Book(Model):
     isbn = CharField(max_length=20, verbose_name="ISBN number of the book.")
     publisher = ForeignKey(Publisher, on_delete=CASCADE)
     contributors = ManyToManyField("Contributor", through="BookContributor")
+    cover = ImageField(null=True, blank=True, upload_to="book_covers/")
+    sample = FileField(null=True, blank=True, upload_to="book_samples/")
 
     def __str__(self) -> str:
         return f"{self.title} ({self.isbn})"

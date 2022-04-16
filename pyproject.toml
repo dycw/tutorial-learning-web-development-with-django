@@ -21,7 +21,7 @@ virtual_env = ".venv/bin/python"
 
 [tool.poetry]
 name = "django-learning"
-version = "0.0.13"
+version = "0.0.14"
 description = "Learning the Django framework"
 authors = ["Derek Wan <d.wan@icloud.com>"]
 license = "MIT"
@@ -30,6 +30,7 @@ license = "MIT"
 python = "^3.10"
 beartype = "^0.10.4"
 django = "^4.0.4"
+pillow = "^9.1.0"
 
 [tool.poetry.dev-dependencies]
 black = "^22.3"
@@ -39,6 +40,8 @@ flake8 = "^4.0"
 hypothesis = "^6.43"
 ipython = "^8.2"
 isort = "^5.10"
+jupyterlab = "^3.3"
+jupyterlab-vim = "^0.15"
 pdbpp = "^0.10"
 pre-commit = "^2.18"
 pyclean = "^2.0"
