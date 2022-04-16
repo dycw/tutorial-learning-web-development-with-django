@@ -6,13 +6,24 @@
 <br />
 <h3>Book Details</h3>
 <hr />
-<span class="text-info">Title: </span> <span>{{ book.title }}</span>
+{% if book.cover %}
+<img src="{{book.cover.url}}" />
 <br />
-<span class="text-info">Publisher: </span><span>{{ book.publisher }}</span>
+{% endif %}
+<span class="text-info">Title: </span>
+<span>{{ book.title }}</span>
 <br />
-<span class="text-info">Publication Date: </span
-><span>{{ book.publication_date }}</span>
+<span class="text-info">Publisher: </span>
+<span>{{ book.publisher }}</span>
 <br />
+<span class="text-info">Publication Date: </span>
+<span>{{ book.publication_date }}</span>
+<br />
+{% if book.sample %}
+<span class="text-info">Sample :</span>
+<span><a href="{{book.sample.url}}">Download</a></span>
+<br />
+{% endif %}
 
 <!-- prettier-ignore -->
 {% if not reviews %}
@@ -20,7 +31,6 @@
 <h3>Be the first one to write a review.</h3>
 {% else %}
 <span class="text-info">Overall Rating: </span>
-
 <span class="badge badge-primary badge-pill">{{ book_rating }}</span>
 <br />
 <hr />
@@ -33,19 +43,15 @@
     <span>{{ review.content }}</span>
     <br />
     <span class="text-info">Created on: </span>
-
     <span>{{ review.date_created }}</span>
     <br />
     <span class="text-info">Modified on: </span>
-
     <span>{{ review.date_edited }}</span>
     <br />
     <span class="text-info">Rating: </span>
-
     <span class="badge badge-secondary badge-pill">{{ review.rating }}</span>
     <br />
     <span class="text-info">Creator: </span>
-
     <span>{{ review.creator.username }}</span>
     <br />
     <a href="{% url 'review_edit' book.pk review.pk %}">Edit Review</a>
@@ -57,6 +63,7 @@
 <a class="btn btn-primary" href="{% url 'review_create' book.pk %}"
   >Add Review</a
 >
+<a class="btn btn-primary" href="{% url 'book_media' book.pk %}">Media</a>
 
 <!-- prettier-ignore -->
 {% endblock %}
