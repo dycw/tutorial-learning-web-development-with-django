@@ -3,7 +3,11 @@ from typing import Any
 from typing import cast
 
 from beartype import beartype
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.models import AbstractUser
 from django.contrib.messages import success
+from django.core.exceptions import PermissionDenied
 from django.core.files.images import ImageFile
 from django.http import HttpRequest
 from django.http import HttpResponse
@@ -88,6 +92,12 @@ def book_detail(request: HttpRequest, pk: int) -> HttpResponse:
 
 
 @beartype
+def is_staff_user(user: AbstractUser) -> bool:
+    return user.is_staff
+
+
+@beartype
+@user_passes_test(is_staff_user)
 def publisher_edit(request: HttpRequest, pk: int | None = None) -> HttpResponse:
     if pk is None:
         publisher = None
@@ -112,6 +122,7 @@ def publisher_edit(request: HttpRequest, pk: int | None = None) -> HttpResponse:
 
 
 @beartype
+@login_required
 def review_edit(
     request: HttpRequest, book_pk: int, review_pk: int | None = None
 ) -> HttpResponse:
@@ -120,6 +131,9 @@ def review_edit(
         review = None
     else:
         review = get_object_or_404(Review, book_id=book_pk, pk=review_pk)
+        user = cast(Any, request.user)
+        if not user.is_staff and review.creator.id != user.id:
+            raise PermissionDenied
     if request.method == "POST":
         if (form := ReviewForm(request.POST, instance=review)).is_valid():
             updated_review = form.save(commit=False)
@@ -147,6 +161,7 @@ def review_edit(
 
 
 @beartype
+@login_required
 def book_media(request: HttpRequest, pk: int) -> HttpResponse:
     book = get_object_or_404(Book, pk=pk)
     if request.method == "POST":
