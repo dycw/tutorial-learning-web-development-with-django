@@ -3,9 +3,11 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from reviews.models import Book
+from reviews.serializers import BookSerializer
 
 
 @api_view()  # type: ignore
-def first_api_view(_: HttpRequest) -> Response:
-    num_books = Book.objects.count()
-    return Response({"num_books": num_books})
+def all_books(_: HttpRequest) -> Response:
+    books = Book.objects.all()
+    book_serializer = BookSerializer(books, many=True)
+    return Response(book_serializer.data)
