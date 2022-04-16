@@ -2,9 +2,7 @@ from django.urls import include
 from django.urls import path
 from rest_framework.routers import DefaultRouter
 
-from reviews.api_views import BookViewSet
-from reviews.api_views import Login
-from reviews.api_views import ReviewViewSet
+from reviews.api_views import first_api_view
 from reviews.views import book_detail
 from reviews.views import book_list
 from reviews.views import book_media
@@ -21,8 +19,7 @@ router.register("reviews", ReviewViewSet)
 
 urlpatterns = [
     path("", index),
-    path("api/", include((router.urls, "api"))),
-    path("api/login/", Login.as_view(), name="login"),
+    path("api/first_api_view/", first_api_view),
     path("books/", book_list, name=book_list.__name__),
     path("books/<int:pk>/", book_detail, name=book_detail.__name__),
     path("books/<int:pk>/media/", book_media, name=book_media.__name__),
