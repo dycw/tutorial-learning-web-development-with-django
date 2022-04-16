@@ -21,7 +21,7 @@ virtual_env = ".venv/bin/python"
 
 [tool.poetry]
 name = "django-learning"
-version = "0.0.17"
+version = "0.0.18"
 description = "Learning the Django framework"
 authors = ["Derek Wan <d.wan@icloud.com>"]
 license = "MIT"
@@ -30,6 +30,7 @@ license = "MIT"
 python = "^3.10"
 beartype = "^0.10.4"
 django = "^4.0.4"
+djangorestframework = "^3.13.1"
 pillow = "^9.1.0"
 
 [tool.poetry.dev-dependencies]
@@ -94,6 +95,7 @@ reportMissingTypeStubs = false
 reportUnknownArgumentType = false
 reportUnknownMemberType = false
 reportUnknownVariableType = false
+reportUntypedBaseClass = false
 reportCallInDefaultInitializer = "error"
 reportImplicitStringConcatenation = "error"
 reportMissingSuperCall = "error"

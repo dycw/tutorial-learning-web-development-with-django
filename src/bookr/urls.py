@@ -10,7 +10,6 @@ from bookr.views import profile
 
 
 urlpatterns: list[URLPattern | URLResolver] = [
-    path("book_management/", include("book_management.urls")),
     path(
         "accounts/",
         include(("django.contrib.auth.urls", "auth"), namespace="accounts"),
