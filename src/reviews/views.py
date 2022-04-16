@@ -3,7 +3,11 @@ from typing import Any
 from typing import cast
 
 from beartype import beartype
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.models import AbstractUser
 from django.contrib.messages import success
+from django.core.exceptions import PermissionDenied
 from django.core.files.images import ImageFile
 from django.http import HttpRequest
 from django.http import HttpResponse
@@ -32,21 +36,26 @@ def index(request: HttpRequest) -> HttpResponse:
 @beartype
 def book_search(request: HttpRequest) -> HttpResponse:
     search_text = request.GET.get("search", "")
-    form = SearchForm(request.GET)
-    if form.is_valid():
+    search_history = request.session.get("search_history", [])
+    books = set()
+    if (form := SearchForm(request.GET)).is_valid():
         cleaned_data = form.cleaned_data
         if search := cleaned_data["search"]:
-            if (cleaned_data.get("search_in") or "title") == "title":
-                books = Book.objects.filter(title__icontains=search)
+            search_in = cleaned_data.get("search_in") or "title"
+            if search_in == "title":
+                books |= set(Book.objects.filter(title__icontains=search))
             else:
-                books = set(
+                books |= set(
                     Contributor.objects.filter(first_names__icontains=search)
                     | Contributor.objects.filter(last_names__icontains=search)
                 )
-        else:
-            books = set()
-    else:
-        books = set()
+            if request.user.is_authenticated:
+                _ = search_history.append([search_in, search])
+                request.session["search_history"] = search_history
+    elif search_history:
+        form = SearchForm(
+            initial={"search": search_text, "search_in": search_history[-1][0]}
+        )
     return render(
         request,
         "reviews/search-results.html",
@@ -78,16 +87,29 @@ def book_list(request: HttpRequest) -> HttpResponse:
 
 @beartype
 def book_detail(request: HttpRequest, pk: int) -> HttpResponse:
-    book = get_object_or_404(Book, pk=pk)
+    book = cast(Any, get_object_or_404(Book, pk=pk))
     if reviews := cast(Any, book).review_set.all():
         book_rating = average_rating([review.rating for review in reviews])
         context = {"book": book, "book_rating": book_rating, "reviews": reviews}
     else:
         context = {"book": book, "book_rating": None, "reviews": None}
+    if request.user.is_authenticated:
+        max_viewed_books_length = 10
+        viewed_books = request.session.get("viewed_books", [])
+        if (viewed_book := [book.id, book.title]) in viewed_books:
+            viewed_books.pop(viewed_books.index(viewed_book))
+            _ = viewed_books.insert(0, viewed_book)
+            viewed_books = viewed_book[:max_viewed_books_length]
     return render(request, "reviews/book_detail.html", context)
 
 
 @beartype
+def is_staff_user(user: AbstractUser) -> bool:
+    return user.is_staff
+
+
+@beartype
+@user_passes_test(is_staff_user)
 def publisher_edit(request: HttpRequest, pk: int | None = None) -> HttpResponse:
     if pk is None:
         publisher = None
@@ -112,6 +134,7 @@ def publisher_edit(request: HttpRequest, pk: int | None = None) -> HttpResponse:
 
 
 @beartype
+@login_required
 def review_edit(
     request: HttpRequest, book_pk: int, review_pk: int | None = None
 ) -> HttpResponse:
@@ -120,6 +143,9 @@ def review_edit(
         review = None
     else:
         review = get_object_or_404(Review, book_id=book_pk, pk=review_pk)
+        user = cast(Any, request.user)
+        if not user.is_staff and review.creator.id != user.id:
+            raise PermissionDenied
     if request.method == "POST":
         if (form := ReviewForm(request.POST, instance=review)).is_valid():
             updated_review = form.save(commit=False)
@@ -147,6 +173,7 @@ def review_edit(
 
 
 @beartype
+@login_required
 def book_media(request: HttpRequest, pk: int) -> HttpResponse:
     book = get_object_or_404(Book, pk=pk)
     if request.method == "POST":

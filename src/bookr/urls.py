@@ -6,8 +6,15 @@ from django.urls import URLResolver
 from django.urls import include
 from django.urls import path
 
+from bookr.views import profile
+
 
 urlpatterns: list[URLPattern | URLResolver] = [
+    path(
+        "accounts/",
+        include(("django.contrib.auth.urls", "auth"), namespace="accounts"),
+    ),
+    path("accounts/profile/", profile, name="profile"),
     path("admin/", site.urls),
     path("", include("reviews.urls")),
 ]
