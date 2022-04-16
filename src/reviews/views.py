@@ -36,21 +36,26 @@ def index(request: HttpRequest) -> HttpResponse:
 @beartype
 def book_search(request: HttpRequest) -> HttpResponse:
     search_text = request.GET.get("search", "")
-    form = SearchForm(request.GET)
-    if form.is_valid():
+    search_history = request.session.get("search_history", [])
+    books = set()
+    if (form := SearchForm(request.GET)).is_valid():
         cleaned_data = form.cleaned_data
         if search := cleaned_data["search"]:
-            if (cleaned_data.get("search_in") or "title") == "title":
-                books = Book.objects.filter(title__icontains=search)
+            search_in = cleaned_data.get("search_in") or "title"
+            if search_in == "title":
+                books |= set(Book.objects.filter(title__icontains=search))
             else:
-                books = set(
+                books |= set(
                     Contributor.objects.filter(first_names__icontains=search)
                     | Contributor.objects.filter(last_names__icontains=search)
                 )
-        else:
-            books = set()
-    else:
-        books = set()
+            if request.user.is_authenticated:
+                _ = search_history.append([search_in, search])
+                request.session["search_history"] = search_history
+    elif search_history:
+        form = SearchForm(
+            initial={"search": search_text, "search_in": search_history[-1][0]}
+        )
     return render(
         request,
         "reviews/search-results.html",
@@ -82,12 +87,19 @@ def book_list(request: HttpRequest) -> HttpResponse:
 
 @beartype
 def book_detail(request: HttpRequest, pk: int) -> HttpResponse:
-    book = get_object_or_404(Book, pk=pk)
+    book = cast(Any, get_object_or_404(Book, pk=pk))
     if reviews := cast(Any, book).review_set.all():
         book_rating = average_rating([review.rating for review in reviews])
         context = {"book": book, "book_rating": book_rating, "reviews": reviews}
     else:
         context = {"book": book, "book_rating": None, "reviews": None}
+    if request.user.is_authenticated:
+        max_viewed_books_length = 10
+        viewed_books = request.session.get("viewed_books", [])
+        if (viewed_book := [book.id, book.title]) in viewed_books:
+            viewed_books.pop(viewed_books.index(viewed_book))
+            _ = viewed_books.insert(0, viewed_book)
+            viewed_books = viewed_book[:max_viewed_books_length]
     return render(request, "reviews/book_detail.html", context)
 
 
