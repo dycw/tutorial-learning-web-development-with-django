@@ -12,7 +12,7 @@ class PublisherSerializer(Serializer):  # type: ignore
 
 
 class BookSerializer(Serializer):  # type: ignore
-    name = CharField()
+    title = CharField()
     publication_date = DateField()
     isbn = CharField()
     publisher = PublisherSerializer()
