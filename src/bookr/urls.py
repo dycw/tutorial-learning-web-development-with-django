@@ -8,6 +8,10 @@ from django.urls import path
 
 
 urlpatterns: list[URLPattern | URLResolver] = [
+    path(
+        "accounts/",
+        include(("django.contrib.auth.urls", "auth"), namespace="accounts"),
+    ),
     path("admin/", site.urls),
     path("", include("reviews.urls")),
 ]
