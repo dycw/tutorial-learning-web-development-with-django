@@ -27,3 +27,14 @@ def get_books_read_by_month(username: str, /) -> QuerySet[Any]:
         .values("date_created__month")
         .annotate(book_count=Count("book__title"))
     )
+
+
+@beartype
+def get_books_read(username: str, /) -> list[dict[str, Any]]:
+    from reviews.models import Review
+
+    books = Review.objects.filter(creator__username__contains=username).all()
+    return [
+        {"title": book_read.book.title, "completed_on": book_read.date_created}
+        for book_read in books
+    ]
