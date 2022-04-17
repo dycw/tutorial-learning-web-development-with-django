@@ -1,6 +1,18 @@
-{% extends 'base.html' %} {% load crispy_forms_tags %} {% block title %} {% if
-form.is_valid and search_text %} Search Results for "{{ search_text }}" {% else
-%} Book Search {% endif %} {% endblock %} {% block content %}
+<!-- prettier-ignore -->
+{% extends 'base.html' %}
+
+<!-- prettier-ignore -->
+{% load crispy_forms_tags %}
+
+<!-- prettier-ignore -->
+{% block title %}
+    {% if form.is_valid and search_text %}
+        Search Results for "{{ search_text }}"
+    {% else %}
+        Book Search
+    {% endif %}
+{% endblock %}
+{% block content %}
 <h2>Search for Books</h2>
 {% crispy form %} {% if form.is_valid and search_text %}
 <h3>Search Results for <em>{{ search_text }}</em></h3>
@@ -19,5 +31,4 @@ form.is_valid and search_text %} Search Results for "{{ search_text }}" {% else
   <li class="list-group-item">No results found.</li>
   {% endfor %}
 </ul>
-
 {% endif %} {% endblock %}
