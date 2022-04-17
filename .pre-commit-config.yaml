@@ -62,7 +62,7 @@ repos:
       - id: trailing-whitespace
   # linters
   - repo: https://github.com/compwa/mirrors-pyright
-    rev: "v1.1.236"
+    rev: "v1.1.237"
     hooks:
       - id: pyright
   - repo: https://github.com/jumanjihouse/pre-commit-hooks
