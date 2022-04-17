@@ -6,12 +6,14 @@
 
 <!-- prettier-ignore -->
 {% block title %}
-    {% if form.is_valid and search_text %}
-        Search Results for "{{ search_text }}"
-    {% else %}
-        Book Search
-    {% endif %}
+  {% if form.is_valid and search_text %}
+    Search Results for "{{ search_text }}"
+  {% else %}
+    Book Search
+  {% endif %}
 {% endblock %}
+
+<!-- prettier-ignore -->
 {% block content %}
 <h2>Search for Books</h2>
 {% crispy form %} {% if form.is_valid and search_text %}
@@ -23,12 +25,18 @@
     <a href="{% url 'book_detail' book.pk %}">{{ book }}</a>
     <br />
     <span class="text-info">Contributors: </span>
-    {% for contributor in book.contributors.all %} {{ contributor.first_names }}
-    {{ contributor.last_names }}{% if not forloop.last %}, {% endif %} {% endfor
-    %}
-  </li>
+    <!-- prettier-ignore -->
+    {% for contributor in book.contributors.all %}
+      {{ contributor.first_names }}
+      {{ contributor.last_names }}
+      {% if not forloop.last %}, {% endif %}
+    {% endfor %}
   {% empty %}
+  </li>
   <li class="list-group-item">No results found.</li>
   {% endfor %}
 </ul>
-{% endif %} {% endblock %}
+{% endif %}
+
+<!-- prettier-ignore -->
+{% endblock %}
