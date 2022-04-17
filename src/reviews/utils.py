@@ -4,6 +4,7 @@ from typing import Any
 from beartype import beartype
 from django.db.models import Count
 from django.db.models import QuerySet
+from django.utils.functional import SimpleLazyObject
 
 
 @beartype
@@ -30,7 +31,7 @@ def get_books_read_by_month(username: str, /) -> QuerySet[Any]:
 
 
 @beartype
-def get_books_read(username: str, /) -> list[dict[str, Any]]:
+def get_books_read(username: SimpleLazyObject, /) -> list[dict[str, Any]]:
     from reviews.models import Review
 
     books = Review.objects.filter(creator__username__contains=username).all()
