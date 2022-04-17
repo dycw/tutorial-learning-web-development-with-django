@@ -1,7 +1,6 @@
 from django.urls import include
 from django.urls import path
 from rest_framework.routers import DefaultRouter
-
 from reviews.api_views import BookViewSet
 from reviews.api_views import Login
 from reviews.api_views import ReviewViewSet

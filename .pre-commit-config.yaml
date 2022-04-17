@@ -5,6 +5,11 @@ repos:
     hooks:
       - id: pyupgrade
         args: [--py310-plus]
+  - repo: https://github.com/asottile/reorder_python_imports
+    rev: v3.0.1
+    hooks:
+      - id: reorder-python-imports
+        args: [--py37-plus]
   - repo: https://github.com/asottile/yesqa
     rev: v1.3.0
     hooks:
@@ -46,10 +51,6 @@ repos:
     rev: 22.3.0
     hooks:
       - id: black
-  - repo: https://github.com/pre-commit/mirrors-isort
-    rev: v5.10.1
-    hooks:
-      - id: isort
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.2.0
     hooks:
@@ -62,7 +63,7 @@ repos:
       - id: trailing-whitespace
   # linters
   - repo: https://github.com/compwa/mirrors-pyright
-    rev: "v1.1.237"
+    rev: "v1.1.238"
     hooks:
       - id: pyright
   - repo: https://github.com/jumanjihouse/pre-commit-hooks

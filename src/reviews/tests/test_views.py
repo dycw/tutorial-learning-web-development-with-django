@@ -2,7 +2,6 @@ from http import HTTPStatus
 
 from django.test import RequestFactory
 from django.test import TestCase
-
 from reviews.views import index
 
 

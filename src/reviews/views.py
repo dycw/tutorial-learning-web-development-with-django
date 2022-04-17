@@ -16,7 +16,6 @@ from django.shortcuts import redirect
 from django.shortcuts import render
 from django.utils.timezone import now
 from PIL import Image
-
 from reviews.forms import BookMediaForm
 from reviews.forms import PublisherForm
 from reviews.forms import ReviewForm
