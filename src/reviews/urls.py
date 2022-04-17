@@ -10,7 +10,6 @@ from reviews.views import book_media
 from reviews.views import book_search
 from reviews.views import index
 from reviews.views import publisher_edit
-from reviews.views import react_example
 from reviews.views import review_edit
 
 
@@ -35,5 +34,4 @@ urlpatterns = [
     path("book-search/", book_search, name=book_search.__name__),
     path("publishers/<int:pk>/", publisher_edit, name=publisher_edit.__name__),
     path("publishers/new/", publisher_edit, name="publisher_create"),
-    path("react-example/", react_example),
 ]
