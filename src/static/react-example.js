@@ -7,8 +7,14 @@ class ClickCounter extends React.Component {
   }
 
   render() {
-    return e("button", {
-      onclick: () => this.setState({ clickCount: this.state.clickCount + 1 }),
-    });
+    return e(
+      "button",
+      {
+        onClick: () => this.setState({ clickCount: this.state.clickCount + 1 }),
+      },
+      this.state.clickCount
+    );
   }
 }
+
+ReactDOM.render(e(ClickCounter), document.getElementById("react_container"));

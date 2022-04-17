@@ -202,3 +202,7 @@ def book_media(request: HttpRequest, pk: int) -> HttpResponse:
             "is_file_upload": True,
         },
     )
+
+
+def react_example(request: HttpRequest) -> HttpResponse:
+    return render(request, "react-example.html")
