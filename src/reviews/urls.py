@@ -7,7 +7,6 @@ from reviews.api_views import ReviewViewSet
 from reviews.views import book_detail
 from reviews.views import book_list
 from reviews.views import book_media
-from reviews.views import book_search
 from reviews.views import index
 from reviews.views import publisher_edit
 from reviews.views import review_edit
@@ -20,8 +19,8 @@ router.register("reviews", ReviewViewSet)
 
 urlpatterns = [
     path("", index),
-    path("api/", include((router.urls, "api"))),
     path("api/login/", Login.as_view(), name="login"),
+    path("api/", include((router.urls, "api"))),
     path("books/", book_list, name=book_list.__name__),
     path("books/<int:pk>/", book_detail, name=book_detail.__name__),
     path("books/<int:pk>/media/", book_media, name=book_media.__name__),
@@ -31,7 +30,6 @@ urlpatterns = [
         review_edit,
         name=review_edit.__name__,
     ),
-    path("book-search/", book_search, name=book_search.__name__),
-    path("publishers/<int:pk>/", publisher_edit, name=publisher_edit.__name__),
+    path("publishers/<int:pk>/", publisher_edit, name="publisher_detail"),
     path("publishers/new/", publisher_edit, name="publisher_create"),
 ]

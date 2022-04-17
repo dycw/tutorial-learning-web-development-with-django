@@ -29,32 +29,28 @@ from reviews.utils import average_rating
 
 @beartype
 def index(request: HttpRequest) -> HttpResponse:
-    return render(request, "base.html")
+    viewed_books = [
+        Book.objects.get(id=book_id)
+        for book_id in request.session.get("viewed_books", [])
+    ]
+    context = {"viewed_books": viewed_books}
+    return render(request, "reviews/index.html", context)
 
 
 @beartype
 def book_search(request: HttpRequest) -> HttpResponse:
     search_text = request.GET.get("search", "")
-    search_history = request.session.get("search_history", [])
     books = set()
     if (form := SearchForm(request.GET)).is_valid():
         cleaned_data = form.cleaned_data
         if search := cleaned_data["search"]:
-            search_in = cleaned_data.get("search_in") or "title"
-            if search_in == "title":
+            if (cleaned_data.get("search_in") or "title") == "title":
                 books |= set(Book.objects.filter(title__icontains=search))
             else:
                 books |= set(
                     Contributor.objects.filter(first_names__icontains=search)
                     | Contributor.objects.filter(last_names__icontains=search)
                 )
-            if request.user.is_authenticated:
-                _ = search_history.append([search_in, search])
-                request.session["search_history"] = search_history
-    elif search_history:
-        form = SearchForm(
-            initial={"search": search_text, "search_in": search_history[-1][0]}
-        )
     return render(
         request,
         "reviews/search-results.html",
@@ -93,12 +89,13 @@ def book_detail(request: HttpRequest, pk: int) -> HttpResponse:
     else:
         context = {"book": book, "book_rating": None, "reviews": None}
     if request.user.is_authenticated:
-        max_viewed_books_length = 10
+        max_viewed_books_length = 5
         viewed_books = request.session.get("viewed_books", [])
-        if (viewed_book := [book.id, book.title]) in viewed_books:
-            viewed_books.pop(viewed_books.index(viewed_book))
-            _ = viewed_books.insert(0, viewed_book)
-            viewed_books = viewed_book[:max_viewed_books_length]
+        if pk in viewed_books:
+            viewed_books.pop(viewed_books.index(pk))
+        _ = viewed_books.insert(0, pk)
+        viewed_books = viewed_books[:max_viewed_books_length]
+        request.session["viewed_books"] = viewed_books
     return render(request, "reviews/book_detail.html", context)
 
 
@@ -118,11 +115,9 @@ def publisher_edit(request: HttpRequest, pk: int | None = None) -> HttpResponse:
         form := PublisherForm(request.POST, instance=publisher)
     ).is_valid():
         updated_publisher = form.save()
-        if publisher is None:
-            success(request, f'Publisher "{updated_publisher}" was created.')
-        else:
-            success(request, f'Publisher "{updated_publisher}" was updated.')
-        return redirect("publisher_edit", updated_publisher.pk)
+        verb = "created" if publisher is None else "updated"
+        success(request, f'Publisher "{updated_publisher}" was {verb}.')
+        return redirect("publisher_detail", updated_publisher.pk)
     else:
         form = PublisherForm(instance=publisher)
     return render(
@@ -153,9 +148,9 @@ def review_edit(
                 success(request, f'Review "{updated_review}" was created.')
             else:
                 updated_review.date_edited = now()
-                updated_review.save()
                 success(request, f'Review "{updated_review}" was updated.')
-            return redirect("publisher_edit", updated_review.pk)
+            updated_review.save()
+            return redirect("book_detail", book.pk)
     else:
         form = ReviewForm(instance=review)
     return render(
@@ -165,8 +160,8 @@ def review_edit(
             "form": form,
             "instance": review_pk,
             "model_type": Review.__name__,
-            "related_model_type": Book.__name__,
             "related_instance": book,
+            "related_model_type": Book.__name__,
         },
     )
 
@@ -187,20 +182,15 @@ def book_media(request: HttpRequest, pk: int) -> HttpResponse:
                 image.save(image_data, cover.image.format)
                 image_file = ImageFile(image_data)
                 book.cover.save(cover.name, image_file)
-                book.save()
-                success(request, f'Book "{book}" was successfully updated')
-                return redirect("book_detail", book.pk)
+            book.save()
+            success(request, f'Book "{book}" was successfully updated')
+            return redirect("book_detail", book.pk)
     else:
         form = BookMediaForm(instance=book)
     return render(
         request,
         "reviews/instance-form.html",
-        {
-            "form": form,
-            "instance": book,
-            "model_type": Book.__name__,
-            "is_file_upload": True,
-        },
+        {"form": form, "instance": book, "model_type": Book.__name__},
     )
 
 
