@@ -9,7 +9,7 @@ target-version = ["py310"]
 
 [tool.poetry]
 name = "django-learning"
-version = "0.0.22"
+version = "0.0.23"
 description = "Learning the Django framework"
 authors = ["Derek Wan <d.wan@icloud.com>"]
 license = "MIT"
