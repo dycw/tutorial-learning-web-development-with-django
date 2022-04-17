@@ -26,15 +26,16 @@ class Dev(Configuration):
     # Application definition
     INSTALLED_APPS = [
         "bookr_admin.apps.BookrAdminConfig",
+        "crispy_forms",
+        "debug_toolbar",
         "django.contrib.auth",
         "django.contrib.contenttypes",
-        "django.contrib.sessions",
         "django.contrib.messages",
+        "django.contrib.sessions",
         "django.contrib.staticfiles",
         "rest_framework",
         "rest_framework.authtoken",
         "reviews",
-        "debug_toolbar",
     ]
 
     MIDDLEWARE = [
@@ -111,6 +112,9 @@ class Dev(Configuration):
     DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
     INTERNAL_IPS = ["127.0.0.1"]
+
+    # Crispy forms
+    CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 
 class Prod(Dev):
