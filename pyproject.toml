@@ -9,7 +9,7 @@ target-version = ["py310"]
 
 [tool.poetry]
 name = "django-learning"
-version = "0.0.23"
+version = "0.0.24"
 description = "Learning the Django framework"
 authors = ["Derek Wan <d.wan@icloud.com>"]
 license = "MIT"
@@ -35,12 +35,10 @@ django-stubs = "^1.10"
 flake8 = "^4.0"
 hypothesis = "^6.43"
 ipython = "^8.2"
-jupyterlab = "^3.3"
-pdbpp = "^0.10"
 pre-commit = "^2.18"
 pyclean = "^2.0"
 pytest = "^7.1"
-rich = "^12.2"
+reorder-python-imports = "^3.0.1"
 # flake8 extensions
 flake8-absolute-import = "^1.0"
 flake8-annotations = "^2.8"
@@ -59,14 +57,11 @@ flake8-simplify = "^0.19"
 flake8-unused-arguments = "^0.0"
 flake8-variables-names = "^0.0"
 pep8-naming = "^0.12"
-# jupyterlab extensions
-jupyterlab-vim = "^0.15"
 # pytest extensions
 pytest-django = "^4.5"
 pytest-instafail = "^0.4"
 pytest-randomly = "^3.8"
 pytest-xdist = "^2.3"
-reorder-python-imports = "^3.0.1"
 
 [tool.pytest.ini_options]
 addopts = ["-rsxX", "--color=auto", "--strict-markers"]
@@ -86,15 +81,8 @@ pythonVersion = "3.10"
 pythonPlatform = "Linux"
 executionEnvironments = [{ root = "src" }]
 typeCheckingMode = "strict"
-reportMissingModuleSource = "error"
 reportMissingTypeStubs = false
 reportUnknownArgumentType = false
 reportUnknownMemberType = false
 reportUnknownVariableType = false
 reportUntypedBaseClass = false
-reportCallInDefaultInitializer = "error"
-reportImplicitStringConcatenation = "error"
-reportMissingSuperCall = "error"
-reportPropertyTypeMismatch = "error"
-reportUnnecessaryTypeIgnoreComment = "error"
-reportUnusedCallResult = "error"
