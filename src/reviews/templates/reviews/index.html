@@ -1,11 +1,19 @@
-{% extends 'reviews/base.html' %} {% load static %} {% block content %} {% if
-viewed_books %} Recently viewed books:
+<!-- prettier-ignore -->
+{% extends 'reviews/base.html' %}
+
+<!-- prettier-ignore -->
+{% load static %}
+
+<!-- prettier-ignore -->
+{% block content %}
+{% if viewed_books %} Recently viewed books:
 <ul>
   {% for book in viewed_books %}
   <li><a href="/books/{{ book.id }}">{{ book.title }}</a></li>
   {% endfor %}
 </ul>
 {% endif %}
+
 <h4>Recent Reviews</h4>
 <div id="recent_reviews"></div>
 <script
