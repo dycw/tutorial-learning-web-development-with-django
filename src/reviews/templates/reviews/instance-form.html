@@ -1,10 +1,33 @@
-{% extends 'reviews/base.html' %} {% load crispy_forms_tags %} {% block title %}
-{% if instance %} Editing {{ model_type }} {{ instance }} {% else %} New {{
-model_type }} {% endif %} {% endblock %} {% block content %}
+<!-- prettier-ignore -->
+{% extends 'reviews/base.html' %}
+
+<!-- prettier-ignore -->
+{% load crispy_forms_tags %}
+
+<!-- prettier-ignore -->
+{% block title %}
+
+{% if instance %}
+  Editing {{ model_type }} {{ instance }}
+{% else %}
+  New {{ model_type }}
+{% endif %}
+
+<!-- prettier-ignore -->
+{% endblock %}
+
+<!-- prettier-ignore -->
+{% block content %}
 <h2>
   {% if instance %} Editing {{ model_type }} <em>{{ instance }}</em>
   {% else %} New {{ model_type }} {% endif %}
 </h2>
 {% if related_instance and related_model_type %}
 <p>For {{ related_model_type }} <em>{{ related_instance }}</em></p>
-{% endif %} {% crispy form %} {% endblock %}
+{% endif %}
+
+<!-- prettier-ignore -->
+{% crispy form %}
+
+<!-- prettier-ignore -->
+{% endblock %}
