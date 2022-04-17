@@ -7,6 +7,9 @@ from django.urls import include
 from django.urls import path
 
 from bookr.views import profile
+from bookr.views import reading_history
+from reviews.views import book_search
+from reviews.views import index
 
 
 urlpatterns: list[URLPattern | URLResolver] = [
@@ -14,8 +17,15 @@ urlpatterns: list[URLPattern | URLResolver] = [
         "accounts/",
         include(("django.contrib.auth.urls", "auth"), namespace="accounts"),
     ),
-    path("accounts/profile/", profile, name="profile"),
+    path("accounts/profile/", profile, name=profile.__name__),
+    path(
+        "accounts/profile/reading_history/",
+        reading_history,
+        name=reading_history.__name__,
+    ),
     path("admin/", site.urls),
+    path("", index),
+    path("book-search/", book_search, name=book_search.__name__),
     path("", include("reviews.urls")),
 ]
 if settings.DEBUG:
