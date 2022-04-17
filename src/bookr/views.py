@@ -9,10 +9,9 @@ from django.shortcuts import render
 from plotly.graph_objects import Figure
 from plotly.graph_objects import Scatter
 from plotly.offline import plot
-from xlsxwriter import Workbook
-
 from reviews.utils import get_books_read
 from reviews.utils import get_books_read_by_month
+from xlsxwriter import Workbook
 
 
 @login_required

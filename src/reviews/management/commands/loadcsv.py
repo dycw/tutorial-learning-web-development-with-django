@@ -4,7 +4,6 @@ import re
 from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand
 from django.core.management.base import CommandError
-
 from reviews.models import Book
 from reviews.models import BookContributor
 from reviews.models import Contributor

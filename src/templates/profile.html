@@ -1,11 +1,20 @@
+<!-- prettier-ignore -->
 {% extends "base.html" %}
 
+<!-- prettier-ignore -->
 {% load profile_tags %}
 
-{% block title %}Bookr{% endblock %}
+<!-- prettier-ignore -->
+{% block title %}
+Bookr
+{% endblock %}
 
-{% block heading %}Profile{% endblock %}
+<!-- prettier-ignore -->
+{% block heading %}
+Profile
+{% endblock %}
 
+<!-- prettier-ignore -->
 {% block content %}
 <ul>
   <li>Username: {{ user.username }}</li>
@@ -16,8 +25,11 @@
   <li>Groups: {{ groups }}{% if not groups %}None{% endif %}</li>
 </ul>
 {% book_list user.username %}
+
+<!-- prettier-ignore -->
 {% autoescape off %}
 {{ books_read_plot }}
 {% endautoescape %}
 
+<!-- prettier-ignore -->
 {% endblock %}

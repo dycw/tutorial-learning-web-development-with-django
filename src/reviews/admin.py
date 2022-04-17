@@ -1,9 +1,8 @@
-from typing import TYPE_CHECKING
 from typing import Any
+from typing import TYPE_CHECKING
 
 from django.contrib.admin import ModelAdmin
 from django.contrib.admin import site
-
 from reviews.models import Book
 from reviews.models import BookContributor
 from reviews.models import Contributor
