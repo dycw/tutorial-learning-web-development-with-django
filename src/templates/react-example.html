@@ -15,6 +15,14 @@
       crossorigin
       src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"
     ></script>
-    <script src="{% static 'react-example.js' %}"></script>
+    <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.
+min.js"></script>
+    <script src="{% static 'react-example.js' %}" type="text/babel"></script>
+    <script type="text/babel">let name = "{{ name|escapejs }}";
+      let target = {{ target }};
+      ReactDOM.render(<ClickCounter name={ name } target={ target }/>,
+      document.getElementById('react_container'));
+    </script>
+
   </body>
 </html>

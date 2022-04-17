@@ -205,4 +205,4 @@ def book_media(request: HttpRequest, pk: int) -> HttpResponse:
 
 
 def react_example(request: HttpRequest) -> HttpResponse:
-    return render(request, "react-example.html")
+    return render(request, "react-example.html", {"name": "Ben", "target": 5})
