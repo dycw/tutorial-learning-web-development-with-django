@@ -29,6 +29,9 @@ urlpatterns: list[URLPattern | URLResolver] = [
     path("", include("reviews.urls")),
 ]
 if settings.DEBUG:
+    from debug_toolbar import urls
+
+    urlpatterns.append(path("__debug__/", include(urls)))
     urlpatterns.extend(
         static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     )

@@ -1,7 +1,7 @@
-<!-- prettier-ignore -->
 {% extends 'base.html' %}
 
-<!-- prettier-ignore -->
+{% load crispy_forms_tags %}
+
 {% block title %}
 {% if form.is_valid and search_text %}
 Search Results for "{{ search_text }}"
@@ -10,41 +10,26 @@ Book Search
 {% endif %}
 {% endblock %}
 
-<!-- prettier-ignore -->
 {% block content %}
-<h2>Search for books</h2>
-<form>
-  {{ form.as_p }}
-  <button type="submit" class="btn btn-primary">Search</button>
-</form>
+<h2>Search for Books</h2>
+{% crispy form %}
 {% if form.is_valid and search_text %}
 <h3>Search Results for <em>{{ search_text }}</em></h3>
 <ul class="list-group">
-  <!-- prettier-ignore -->
   {% for book in books %}
   <li class="list-group-item">
     <span class="text-info">Title: </span>
     <a href="{% url 'book_detail' book.pk %}">{{ book }}</a>
     <br />
     <span class="text-info">Contributors: </span>
-    <!-- prettier-ignore -->
     {% for contributor in book.contributors.all %}
-    {{ contributor.first_names }}
-    {{ contributor.last_names }}
-    <!-- prettier-ignore -->
-    {% if not forloop.last %},
-    <!-- prettier-ignore -->
-    {% endif %}
-    <!-- prettier-ignore -->
+    {{ contributor.first_names }} {{ contributor.last_names }}{% if not forloop.last %}, {% endif %}
     {% endfor %}
   </li>
-  <!-- prettier-ignore -->
   {% empty %}
-  <li class="list-group-item"></li>
-  <!-- prettier-ignore -->
+  <li class="list-group-item">No results found.</li>
   {% endfor %}
 </ul>
-<!-- prettier-ignore -->
+
 {% endif %}
-<!-- prettier-ignore -->
 {% endblock %}
