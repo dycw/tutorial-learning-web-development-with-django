@@ -361,7 +361,7 @@ testing = ["django-cache-url (>=1.0.0)", "dj-database-url", "dj-email-url", "dj-
 name = "django-debug-toolbar"
 version = "3.2.4"
 description = "A configurable set of panels that display various debug information about the current request/response."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6"
 
@@ -1981,7 +1981,7 @@ python-versions = ">=3.4"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "7566a594f6ca49176ce0d1fab5022a75fe9fb816932842ef1e083ca51c121e01"
+content-hash = "80d3cb5c1cbdffff3b0d711e112dad11776e47d820d504eeb7130d9b372ef94f"
 
 [metadata.files]
 anyio = [

@@ -36,6 +36,7 @@ xlsxwriter = "^3.0.3"
 # django extensions
 dj-database-url = "^0.5.0"
 django-configurations = "^2.3.2"
+django-debug-toolbar = "^3.2"
 djangorestframework = "^3.13.1"
 
 [tool.poetry.dev-dependencies]
@@ -52,8 +53,6 @@ pre-commit = "^2.18"
 pyclean = "^2.0"
 pytest = "^7.1"
 rich = "^12.2"
-# django extensions
-django-debug-toolbar = "^3.2"
 # flake8 extensions
 flake8-absolute-import = "^1.0"
 flake8-annotations = "^2.8"
