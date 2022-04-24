@@ -19,7 +19,7 @@ from reviews.serializers import ReviewSerializer
 
 
 class Login(APIView):
-    def post(self, request: Request) -> Response:  # type: ignore
+    def post(self, request: Request) -> Response:
         data = cast(Any, request.data)
         user = authenticate(
             username=data.get("username"), password=data.get("password")
