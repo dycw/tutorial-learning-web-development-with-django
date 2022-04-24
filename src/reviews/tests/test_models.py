@@ -1,4 +1,5 @@
 from django.test import TestCase
+
 from reviews.models import Book
 from reviews.models import Contributor
 from reviews.models import Publisher

@@ -3,8 +3,8 @@ from typing import Any
 
 from django.contrib.admin import AdminSite
 from django.template.response import TemplateResponse
-from django.urls import path
 from django.urls import URLResolver
+from django.urls import path
 from django.urls.resolvers import URLPattern
 
 
