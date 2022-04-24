@@ -1,3 +1,4 @@
-# django-learning-web-development-with-django
+# web-development-with-django
 
-Learning the "Web Development with Django" book
+Learning the [Web Development with Django](https://www.packtpub.com/product/web-development-with-django/9781839212505)
+book.

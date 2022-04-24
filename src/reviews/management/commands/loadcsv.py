@@ -4,6 +4,7 @@ import re
 from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand
 from django.core.management.base import CommandError
+
 from reviews.models import Book
 from reviews.models import BookContributor
 from reviews.models import Contributor
@@ -12,7 +13,7 @@ from reviews.models import Review
 
 
 class Command(BaseCommand):
-    help = "Load the reviews data from a CSV file."  # noqa
+    help = "Load the reviews data from a CSV file."
 
     def add_arguments(self, parser):  # type: ignore # noqa
         parser.add_argument("--csv", type=str)  # type: ignore
@@ -24,7 +25,7 @@ class Command(BaseCommand):
         return {header[i]: row[i] for i, head in enumerate(header) if head}
 
     def handle(self, *args, **options):  # type: ignore # noqa
-        m = re.compile(r"content:(\w+)")  # noqa
+        m = re.compile(r"content:(\w+)")
         header = None
         models = dict()  # noqa
         try:
